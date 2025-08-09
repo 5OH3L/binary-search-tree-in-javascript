@@ -37,15 +37,15 @@ const TreePrototype = {
     if (!Array.isArray(array)) return null;
     return this.removeDuplicate(this.mergeSort(array));
   },
-  Node(data, leftNode = null, rightNode = null) {
-    return { data, leftNode, rightNode };
+  Node(data, left = null, right = null) {
+    return { data, left, right };
   },
   build(array, start, end) {
     if (start > end) return null;
     let mid = Math.floor(start + (end - start) / 2);
     const root = this.Node(array[mid]);
-    root.leftNode = this.build(array, start, mid - 1);
-    root.rightNode = this.build(array, mid + 1, end);
+    root.left = this.build(array, start, mid - 1);
+    root.right = this.build(array, mid + 1, end);
     return root;
   },
   buildTree(array) {
@@ -58,25 +58,25 @@ const TreePrototype = {
     while (true) {
       if (currentNode.data === value) return false;
       if (value < currentNode.data) {
-        if (currentNode.leftNode) {
+        if (currentNode.left) {
           lastNode = currentNode;
-          currentNode = currentNode.leftNode;
+          currentNode = currentNode.left;
         } else {
-          currentNode.leftNode = this.Node(value);
+          currentNode.left = this.Node(value);
           return true;
         }
       }
       if (currentNode.data < value) {
-        if (currentNode.rightNode) {
+        if (currentNode.right) {
           lastNode = currentNode;
-          currentNode = currentNode.rightNode;
+          currentNode = currentNode.right;
         } else {
-          currentNode.rightNode = this.Node(value);
+          currentNode.right = this.Node(value);
           return true;
         }
       }
     }
-  },
+  }
 };
 function Tree(array) {
   const tree = Object.create(TreePrototype);
