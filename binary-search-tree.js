@@ -53,13 +53,33 @@ const TreePrototype = {
     const processedArray = this.processArray(array);
     return this.build(processedArray, 0, processedArray.length - 1);
   },
+  insert(value) {
+    let currentNode = this.root;
+    while (true) {
+      if (currentNode.data === value) return false;
+      if (value < currentNode.data) {
+        if (currentNode.leftNode) {
+          lastNode = currentNode;
+          currentNode = currentNode.leftNode;
+        } else {
+          currentNode.leftNode = this.Node(value);
+          return true;
+        }
+      }
+      if (currentNode.data < value) {
+        if (currentNode.rightNode) {
+          lastNode = currentNode;
+          currentNode = currentNode.rightNode;
+        } else {
+          currentNode.rightNode = this.Node(value);
+          return true;
+        }
+      }
+    }
+  },
 };
 function Tree(array) {
   const tree = Object.create(TreePrototype);
   tree.root = TreePrototype.buildTree(array);
-  return {
-    get root() {
-      return tree.root;
-    },
-  };
+  return tree;
 }
