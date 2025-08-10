@@ -34,7 +34,8 @@ const TreePrototype = {
   },
   processArray(array) {
     if (!Array.isArray(array)) return null;
-    if (array.length < 2) return null;
+    if (array.length < 1) return null;
+    if (array.length === 1) return this.Node(array[0]);
     return this.removeDuplicate(this.mergeSort(array));
   },
   Node(data, left = null, right = null) {
@@ -56,6 +57,7 @@ const TreePrototype = {
     return this.build(processedArray, 0, processedArray.length - 1);
   },
   insert(value) {
+    if (!Number.isInteger(value) || (!value && value !== 0)) return false;
     if (this.root === null) {
       this.root = this.Node(value);
       return true;
@@ -79,6 +81,48 @@ const TreePrototype = {
         }
       }
     }
+  },
+
+  deleteItem(value) {
+    const findMin = node => {
+      while (node.left) node = node.left;
+      return node;
+    };
+    let parent = null;
+    let current = this.root;
+    let direction = null;
+
+    while (current && current.data !== value) {
+      parent = current;
+      if (value < current.data) {
+        current = current.left;
+        direction = "left";
+      } else {
+        current = current.right;
+        direction = "right";
+      }
+    }
+    if (!current) return false;
+
+    // Case 1: No children
+    if (!current.left && !current.right) {
+      if (!parent) this.root = null;
+      else parent[direction] = null;
+    }
+    // Case 2: One child
+    else if (!current.left || !current.right) {
+      const child = current.left || current.right;
+      if (!parent) this.root = child;
+      else parent[direction] = child;
+    }
+    // Case 3: Two children
+    else {
+      const successor = findMin(current.right);
+      const successorData = successor.data;
+      this.deleteItem(successorData);
+      current.data = successorData;
+    }
+    return true;
   },
 };
 function Tree(array) {
