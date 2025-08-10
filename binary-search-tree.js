@@ -26,7 +26,7 @@ const TreePrototype = {
     return this.merge(this.mergeSort(leftArray), this.mergeSort(rightArray));
   },
   removeDuplicate(sortedArray) {
-    if (sortedArray.length < 2) return null;
+    if (!sortedArray?.length) return [];
     const newSortedArray = [sortedArray[0]];
     for (let i = 1; i < sortedArray.length; i++)
       if (newSortedArray[newSortedArray.length - 1] !== sortedArray[i]) newSortedArray.push(sortedArray[i]);
@@ -61,11 +61,7 @@ const TreePrototype = {
       return true;
     }
     let pointer = this.root;
-    if (!pointer.left && !pointer.right) {
-      value < pointer.data ? (pointer.left = this.Node(value)) : (pointer.right = this.Node(value));
-      return true;
-    }
-    while (pointer.left || pointer.right) {
+    while (true) {
       if (pointer.data === value) return false;
       if (value < pointer.data) {
         if (pointer.left) {
@@ -74,7 +70,7 @@ const TreePrototype = {
           pointer.left = this.Node(value);
           return true;
         }
-      } else if (pointer.data < value) {
+      } else {
         if (pointer.right) {
           pointer = pointer.right;
         } else {
@@ -83,7 +79,6 @@ const TreePrototype = {
         }
       }
     }
-    return false;
   },
 };
 function Tree(array) {
