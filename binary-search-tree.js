@@ -82,7 +82,6 @@ const TreePrototype = {
       }
     }
   },
-
   deleteItem(value) {
     const findMin = node => {
       while (node.left) node = node.left;
@@ -123,6 +122,25 @@ const TreePrototype = {
       current.data = successorData;
     }
     return true;
+  },
+  find(value) {
+    if (!Number.isInteger(value)) return null;
+    let pointer = this.root;
+    while (pointer && pointer.data !== value) {
+      pointer = value < pointer.data ? pointer.left : pointer.right;
+    }
+    return pointer;
+  },
+  levelOrderForEach(callback) {
+    if (!callback) throw new Error("Callback function must be provided!");
+    if (!this.root) return null;
+    const queue = [this.root];
+    while (queue.length > 0) {
+      let node = queue.shift();
+      callback(node);
+      if (node.left) queue.push(node.left);
+      if (node.right) queue.push(node.right);
+    }
   },
 };
 function Tree(array) {
