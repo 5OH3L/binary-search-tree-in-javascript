@@ -14,10 +14,8 @@ const TreePrototype = {
     }
     if (array1.length > i && array2.length <= j) {
       mergedArray.push(...array1.splice(i));
-      return mergedArray;
     } else if (array2.length > j && array1.length <= i) {
       mergedArray.push(...array2.splice(j));
-      return mergedArray;
     }
     return mergedArray;
   },
@@ -27,14 +25,16 @@ const TreePrototype = {
     const rightArray = array.slice(array.length / 2, array.length);
     return this.merge(this.mergeSort(leftArray), this.mergeSort(rightArray));
   },
-  removeDuplicate(array) {
-    if (array.length < 1) return null;
-    const newArray = [array[0]];
-    for (let i = 1; i < array.length; i++) if (newArray[newArray.length - 1] !== array[i]) newArray.push(array[i]);
-    return newArray;
+  removeDuplicate(sortedArray) {
+    if (sortedArray.length < 2) return null;
+    const newSortedArray = [sortedArray[0]];
+    for (let i = 1; i < sortedArray.length; i++)
+      if (newSortedArray[newSortedArray.length - 1] !== sortedArray[i]) newSortedArray.push(sortedArray[i]);
+    return newSortedArray;
   },
   processArray(array) {
     if (!Array.isArray(array)) return null;
+    if (array.length < 2) return null;
     return this.removeDuplicate(this.mergeSort(array));
   },
   Node(data, left = null, right = null) {
@@ -49,34 +49,42 @@ const TreePrototype = {
     return root;
   },
   buildTree(array) {
-    if (!Array.isArray(array) || array.length < 3) return null;
+    if (!Array.isArray(array)) return null;
+    if (array.length < 1) return null;
+    if (array.length === 1) return this.Node(array[0]);
     const processedArray = this.processArray(array);
     return this.build(processedArray, 0, processedArray.length - 1);
   },
   insert(value) {
-    let currentNode = this.root;
-    while (true) {
-      if (currentNode.data === value) return false;
-      if (value < currentNode.data) {
-        if (currentNode.left) {
-          lastNode = currentNode;
-          currentNode = currentNode.left;
+    if (this.root === null) {
+      this.root = this.Node(value);
+      return true;
+    }
+    let pointer = this.root;
+    if (!pointer.left && !pointer.right) {
+      value < pointer.data ? (pointer.left = this.Node(value)) : (pointer.right = this.Node(value));
+      return true;
+    }
+    while (pointer.left || pointer.right) {
+      if (pointer.data === value) return false;
+      if (value < pointer.data) {
+        if (pointer.left) {
+          pointer = pointer.left;
         } else {
-          currentNode.left = this.Node(value);
+          pointer.left = this.Node(value);
           return true;
         }
-      }
-      if (currentNode.data < value) {
-        if (currentNode.right) {
-          lastNode = currentNode;
-          currentNode = currentNode.right;
+      } else if (pointer.data < value) {
+        if (pointer.right) {
+          pointer = pointer.right;
         } else {
-          currentNode.right = this.Node(value);
+          pointer.right = this.Node(value);
           return true;
         }
       }
     }
-  }
+    return false;
+  },
 };
 function Tree(array) {
   const tree = Object.create(TreePrototype);
