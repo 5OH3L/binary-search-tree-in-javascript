@@ -246,6 +246,12 @@ const TreePrototype = {
 
     return Math.abs(leftHeight - rightHeight) <= 1 && this.isBalanced(node.left) && this.isBalanced(node.left);
   },
+  rebalance() {
+    if (!this.root) return null;
+    let array = [];
+    this.inOrderForEach(node => array.push(node.data));
+    this.root = this.buildTree(array);
+  },
 };
 function Tree(array) {
   const tree = Object.create(TreePrototype);
