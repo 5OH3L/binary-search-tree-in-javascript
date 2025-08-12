@@ -159,6 +159,21 @@ const TreePrototype = {
     callback(node);
     this.inOrderForEachRec(callback, node.right);
   },
+  inOrderForEach(callback, node = this.root) {
+    if (!callback) throw new Error("Callback function must be provided!");
+    if (!node) return null;
+    const stack = [];
+
+    while (node || stack.length > 0) {
+      while (node) {
+        stack.push(node);
+        node = node.left;
+      }
+      node = stack.pop();
+      callback(node);
+      node = node.right;
+    }
+  },
   preOrderForEachRec(callback, node = this.root) {
     if (!callback) throw new Error("Callback function must be provided!");
     if (!node) return null;
@@ -166,12 +181,43 @@ const TreePrototype = {
     this.preOrderForEachRec(callback, node.left);
     this.preOrderForEachRec(callback, node.right);
   },
+  preOrderForEach(callback, node = this.root) {
+    if (!callback) throw new Error("Callback function must be provided!");
+    if (!node) return null;
+    const stack = [];
+
+    while (node || stack.length > 0) {
+      while (node) {
+        callback(node);
+        stack.push(node);
+        node = node.left;
+      }
+      node = stack.pop();
+      node = node.right;
+    }
+  },
   postOrderForEachRec(callback, node = this.root) {
     if (!callback) throw new Error("Callback function must be provided!");
     if (!node) return null;
     this.postOrderForEachRec(callback, node.left);
     this.postOrderForEachRec(callback, node.right);
     callback(node);
+  },
+  postOrderForEach(callback, node = this.root) {
+    if (!callback) throw new Error("Callback function must be provided!");
+    if (!node) return null;
+    const stack1 = [this.root];
+    const stack2 = [];
+
+    while (stack1.length > 0) {
+      const node = stack1.pop();
+      stack2.push(node);
+      if (node.left) stack1.push(node.left);
+      if (node.right) stack1.push(node.right);
+    }
+    while (stack2.length > 0) {
+      callback(stack2.pop());
+    }
   },
 };
 function Tree(array) {
