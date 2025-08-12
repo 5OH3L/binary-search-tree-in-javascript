@@ -239,6 +239,14 @@ const TreePrototype = {
     }
     return depth;
   },
+  isBalanced(node = this.root) {
+    if (!node) return true;
+
+    const leftHeight = this.calculateHeight(node.left);
+    const rightHeight = this.calculateHeight(node.right);
+
+    return Math.abs(leftHeight - rightHeight) <= 1 && this.isBalanced(node.left) && this.isBalanced(node.left);
+  },
 };
 function Tree(array) {
   const tree = Object.create(TreePrototype);
