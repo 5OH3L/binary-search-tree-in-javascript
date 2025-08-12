@@ -1,4 +1,16 @@
 const TreePrototype = {
+  prettyPrint(node = this.root, prefix = "", isLeft = true) {
+    if (node === null) {
+      return;
+    }
+    if (node.right !== null) {
+      this.prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
+    }
+    console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.data}`);
+    if (node.left !== null) {
+      this.prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
+    }
+  },
   merge(array1, array2) {
     let i = 0;
     let j = 0;
@@ -13,9 +25,9 @@ const TreePrototype = {
       }
     }
     if (array1.length > i && array2.length <= j) {
-      mergedArray.push(...array1.splice(i));
+      mergedArray.push(...array1.slice(i));
     } else if (array2.length > j && array1.length <= i) {
-      mergedArray.push(...array2.splice(j));
+      mergedArray.push(...array2.slice(j));
     }
     return mergedArray;
   },
@@ -57,7 +69,7 @@ const TreePrototype = {
     return this.build(processedArray, 0, processedArray.length - 1);
   },
   insert(value) {
-    if (!Number.isInteger(value) || (!value && value !== 0)) return false;
+    if (!Number.isInteger(value) || value < 1 || value > 99) return false;
     if (this.root === null) {
       this.root = this.Node(value);
       return true;
@@ -205,7 +217,7 @@ const TreePrototype = {
   postOrderForEach(callback, node = this.root) {
     if (!callback) throw new Error("Callback function must be provided!");
     if (!node) return null;
-    const stack1 = [this.root];
+    const stack1 = [node];
     const stack2 = [];
 
     while (stack1.length > 0) {
@@ -232,11 +244,12 @@ const TreePrototype = {
     if (!Number.isInteger(value)) return null;
     let depth = 0;
     let pointer = this.root;
-    while (pointer && pointer.data !== value) {
+    while (pointer) {
+      if (pointer.data === value) return depth;
       depth++;
       pointer = value < pointer.data ? pointer.left : pointer.right;
     }
-    return depth;
+    return null;
   },
   isBalanced(node = this.root) {
     if (!node) return true;
@@ -244,7 +257,7 @@ const TreePrototype = {
     const leftHeight = this.calculateHeight(node.left);
     const rightHeight = this.calculateHeight(node.right);
 
-    return Math.abs(leftHeight - rightHeight) <= 1 && this.isBalanced(node.left) && this.isBalanced(node.left);
+    return Math.abs(leftHeight - rightHeight) <= 1 && this.isBalanced(node.left) && this.isBalanced(node.right);
   },
   rebalance() {
     if (!this.root) return null;
@@ -258,3 +271,5 @@ function Tree(array) {
   tree.root = TreePrototype.buildTree(array);
   return tree;
 }
+
+module.exports = { Tree };
