@@ -152,6 +152,27 @@ const TreePrototype = {
       if (node.right) queue.push(node.right);
     }
   },
+  inOrderForEachRec(callback, node = this.root) {
+    if (!callback) throw new Error("Callback function must be provided!");
+    if (!node) return null;
+    this.inOrderForEachRec(callback, node.left);
+    callback(node);
+    this.inOrderForEachRec(callback, node.right);
+  },
+  preOrderForEachRec(callback, node = this.root) {
+    if (!callback) throw new Error("Callback function must be provided!");
+    if (!node) return null;
+    callback(node);
+    this.preOrderForEachRec(callback, node.left);
+    this.preOrderForEachRec(callback, node.right);
+  },
+  postOrderForEachRec(callback, node = this.root) {
+    if (!callback) throw new Error("Callback function must be provided!");
+    if (!node) return null;
+    this.postOrderForEachRec(callback, node.left);
+    this.postOrderForEachRec(callback, node.right);
+    callback(node);
+  },
 };
 function Tree(array) {
   const tree = Object.create(TreePrototype);
