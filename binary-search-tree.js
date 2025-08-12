@@ -219,6 +219,15 @@ const TreePrototype = {
       callback(stack2.pop());
     }
   },
+  calculateHeight(node) {
+    if (!node) return -1;
+    return Math.max(this.calculateHeight(node.left), this.calculateHeight(node.right)) + 1;
+  },
+  height(value) {
+    let node = this.find(value);
+    if (!node) return null;
+    return this.calculateHeight(node);
+  },
 };
 function Tree(array) {
   const tree = Object.create(TreePrototype);
