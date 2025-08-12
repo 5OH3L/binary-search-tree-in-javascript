@@ -131,6 +131,16 @@ const TreePrototype = {
     }
     return pointer;
   },
+  levelOrderForEachRec(callback, queue = [this.root]) {
+    if (!callback) throw new Error("Callback function must be provided!");
+    if (!this.root) return null;
+    if (queue.length === 0) return null;
+    const node = queue.shift();
+    callback(node);
+    if (node.left) queue.push(node.left);
+    if (node.right) queue.push(node.right);
+    this.levelOrderForEachRec(callback, queue);
+  },
   levelOrderForEach(callback) {
     if (!callback) throw new Error("Callback function must be provided!");
     if (!this.root) return null;
