@@ -228,6 +228,17 @@ const TreePrototype = {
     if (!node) return null;
     return this.calculateHeight(node);
   },
+  depth(value) {
+    if (!this.root) return null;
+    if (!Number.isInteger(value)) return null;
+    let depth = 0;
+    let pointer = this.root;
+    while (pointer && pointer.data !== value) {
+      depth++;
+      pointer = value < pointer.data ? pointer.left : pointer.right;
+    }
+    return depth;
+  },
 };
 function Tree(array) {
   const tree = Object.create(TreePrototype);
