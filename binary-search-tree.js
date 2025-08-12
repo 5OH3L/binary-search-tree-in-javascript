@@ -127,9 +127,7 @@ const TreePrototype = {
     if (!Number.isInteger(value)) return null;
     if (!this.root) return null;
     let pointer = this.root;
-    while (pointer && pointer.data !== value) {
-      pointer = value < pointer.data ? pointer.left : pointer.right;
-    }
+    while (pointer && pointer.data !== value) pointer = value < pointer.data ? pointer.left : pointer.right;
     return pointer;
   },
   levelOrderForEachRec(callback, queue = [this.root]) {
