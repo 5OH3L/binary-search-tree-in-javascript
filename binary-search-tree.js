@@ -125,6 +125,7 @@ const TreePrototype = {
   },
   find(value) {
     if (!Number.isInteger(value)) return null;
+    if (!this.root) return null;
     let pointer = this.root;
     while (pointer && pointer.data !== value) {
       pointer = value < pointer.data ? pointer.left : pointer.right;
